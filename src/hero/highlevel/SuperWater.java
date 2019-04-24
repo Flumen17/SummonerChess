@@ -4,6 +4,7 @@ import hero.Plant;
 import hero.Water;
 import hero.base.Hero;
 import javafx.scene.paint.Color;
+import main.Main;
 
 public class SuperWater extends Water {
 
@@ -12,17 +13,15 @@ public class SuperWater extends Water {
 	}
 
 	@Override
-	public boolean canKill(Hero hero) {
+	public boolean canKill(int x, int y) {
+		Hero hero = Main.gameScreen.getGamePart().getLogicPane().getCellAt(x, y).getHero();
+		if(hero == null) {
+			return false;
+		}
 		if(hero instanceof Plant) {
 			return false;
 		}
-		return true;
-	}
-
-	@Override
-	public void showStraightMove() {
-		// TODO Auto-generated method stub
-	
+		return canKillStraight(x, y);
 	}
 
 	@Override
@@ -30,5 +29,12 @@ public class SuperWater extends Water {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean canKillStraight(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 	
 }

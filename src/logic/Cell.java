@@ -63,4 +63,8 @@ public class Cell extends StackPane{
 	public void setType(Type type) {
 		this.type = type;
 	}
+	
+	public Type getType() {
+		return type;
+	}
 }

@@ -1,6 +1,8 @@
 package hero.base;
 
 import javafx.scene.paint.Color;
+import logic.Cell;
+import main.Main;
 
 public abstract class Hero {
 	
@@ -10,7 +12,15 @@ public abstract class Hero {
 	
 	protected Color color;
 	
-	public abstract void showMove();
+	public void showMove(){
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				if(canMove(i, j))Main.gameScreen.getGamePart().getLogicPane().getCellAt(i, j).setType(Cell.Type.MOVEABLE);
+				if(canKill(i, j))Main.gameScreen.getGamePart().getLogicPane().getCellAt(i, j).setType(Cell.Type.KILLABLE);
+			}
+		}
+		Main.gameScreen.getGamePart().getPaintPane().render();
+	}
 	
 	public abstract boolean canMove(int x,int y);
 	
@@ -26,12 +36,9 @@ public abstract class Hero {
 		}
 	};
 	
-	public abstract boolean canKill(Hero hero);
+	public abstract boolean canKill(int x, int y);
 	
 	public void kill(Hero hero) {
-		if(canKill(hero)) {
-			hero.die();
-		}
 		
 	}
 	

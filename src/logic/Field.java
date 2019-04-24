@@ -46,6 +46,16 @@ public class Field extends GridPane {
 		//this.setBackground(new Background(new BackgroundFill(Color.AQUAMARINE, CornerRadii.EMPTY, Insets.EMPTY)));
 	}
 	
+	public void setInitial() {
+		for(int i=0; i<9; i++) {
+			for(int j=0; j<9; j++) {
+				if(i<=3&&Math.abs(j-4)>i)this.getCellAt(i, j).setType(Cell.Type.OUTFIELD);
+				else if(i>3&&Math.abs(j-4)>(8-i))this.getCellAt(i, j).setType(Cell.Type.OUTFIELD);
+				else this.getCellAt(i, j).setType(Cell.Type.NORMAL);
+			}
+		}
+	}
+	
 	public Cell getCellAt(int x, int y) {
 		return field.get(x).get(y); 
 	}

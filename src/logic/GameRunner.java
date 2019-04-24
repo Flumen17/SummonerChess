@@ -2,9 +2,11 @@ package logic;
 
 
 import gui.ActionPart;
+import gui.FieldUI;
 import gui.GamePart;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -14,14 +16,17 @@ import main.Main;
 
 public class GameRunner {
 	private Field field;
-	private GamePart gamePart;
+	private FieldUI fieldUI;
 	private ActionPart actionPart;
-	private Cell selectedCell;
 	private int currentRow, currentCol, turn;
+	private PlayerControl playerOne;
+	private PlayerControl playerTwo;
 	public GameRunner() {
-		PlayerControl playerOne = new PlayerControl(4, 1, Color.BLACK);
-		PlayerControl playerTwo = new PlayerControl(4, 7, Color.WHITE);
+		playerOne = new PlayerControl(4, 1, Color.BLACK);
+		playerTwo = new PlayerControl(4, 7, Color.WHITE);
 		field = Main.gameScreen.getGamePart().getLogicPane();
+		fieldUI = Main.gameScreen.getGamePart().getPaintPane();
+		actionPart = Main.gameScreen.getActionPart();
 		field.getCellAt(4, 1).setHero(playerOne.getSummoner());
 		field.getCellAt(4, 7).setHero(playerTwo.getSummoner());
 		for(int i = 0; i < 9; i++) {
@@ -35,23 +40,18 @@ public class GameRunner {
 				});
 			}
 		}
-		Main.gameScreen.getGamePart().getPaintPane().render();
+		fieldUI.render();
 	}
 	
 	public void start(){
 		turn = 1;
+		while(true) {
+			
+		}
 	}
 	
-	public void setSelectedCell(Cell cell) {
-		this.selectedCell = cell;
-	}
-
 	public Field getField() {
 		return field;
-	}
-
-	public Cell getSelectedCell() {
-		return selectedCell;
 	}
 
 	public int getCurrentRow() {
@@ -63,7 +63,36 @@ public class GameRunner {
 	}
 	
 	public void Click(Cell cell) {
-		
+		PlayerControl p;
+		if(turn%2 == 1) {
+			p = this.playerOne;
+		}
+		else {
+			p = this.playerTwo;
+		}
+		if(p.getStatus() == PlayerControl.Status.NONE || p.getStatus() == PlayerControl.Status.SELECTHEROTOSUMMON) {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setHeaderText("Please Select Action First");
+		}
+		else if(p.getStatus() == PlayerControl.Status.SUMMON) {
+			
+		}
+		else if(p.getStatus() == PlayerControl.Status.MOVE) {
+			if(cell.getHero() == null) {
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+				alert.setHeaderText("Please Select Hero to Move");
+			}
+			else {
+				cell.getHero().showMove();
+				p.setStatus(PlayerControl.Status.SELECTHEROTOMOVE);
+			}
+		}
+		else if(p.getStatus() == PlayerControl.Status.SELECTHEROTOMOVE) {
+			
+		}
+		else if(p.getStatus() == PlayerControl.Status.SELECTSACRIFICE) {
+			
+		}
 	}
 	
 }

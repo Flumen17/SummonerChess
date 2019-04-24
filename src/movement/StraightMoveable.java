@@ -1,6 +1,6 @@
 package movement;
 
 public interface StraightMoveable {
-	void showStraightMove();
+	boolean canKillStraight(int x,int y);
 	boolean canMoveStraight(int x, int y);
 }

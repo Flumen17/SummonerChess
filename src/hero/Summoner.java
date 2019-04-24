@@ -2,6 +2,7 @@ package hero;
 
 import hero.base.Hero;
 import javafx.scene.paint.Color;
+import main.Main;
 import movement.DiagonalMoveable;
 import movement.StraightMoveable;
 
@@ -12,25 +13,17 @@ public class Summoner extends Hero implements StraightMoveable, DiagonalMoveable
 	}
 
 	@Override
-	public void showMove() {
-		showStraightMove();
-		showDiagonalMove();
-	}
-
-	@Override
 	public boolean canMove(int x, int y) {
 		return canMoveStraight(x, y) || canMoveDiagonal(x, y);
 	}
 
 	@Override
-	public boolean canKill(Hero hero) {
-		return true;
-	}
-	
-	@Override
-	public void showDiagonalMove() {
-		// TODO Auto-generated method stub
-		
+	public boolean canKill(int x, int y) {
+		Hero hero = Main.gameScreen.getGamePart().getLogicPane().getCellAt(x, y).getHero();
+		if(hero == null) {
+			return false;
+		}
+		return canKillStraight(x, y) || canKillDiagonal(x, y);
 	}
 
 	@Override
@@ -40,13 +33,19 @@ public class Summoner extends Hero implements StraightMoveable, DiagonalMoveable
 	}
 
 	@Override
-	public void showStraightMove() {
+	public boolean canMoveStraight(int x, int y) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public boolean canMoveStraight(int x, int y) {
+	public boolean canKillDiagonal(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean canKillStraight(int x, int y) {
 		// TODO Auto-generated method stub
 		return false;
 	}

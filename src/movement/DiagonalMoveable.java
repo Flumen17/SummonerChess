@@ -1,6 +1,6 @@
 package movement;
 
 public interface DiagonalMoveable {
-	void showDiagonalMove();
+	boolean canKillDiagonal(int x,int y);
 	boolean canMoveDiagonal(int x,int y);
 }

@@ -4,6 +4,7 @@ import hero.Fire;
 import hero.Water;
 import hero.base.Hero;
 import javafx.scene.paint.Color;
+import main.Main;
 
 public class SuperFire extends Fire {
 
@@ -12,16 +13,15 @@ public class SuperFire extends Fire {
 	}
 
 	@Override
-	public boolean canKill(Hero hero) {
+	public boolean canKill(int x, int y) {
+		Hero hero = Main.gameScreen.getGamePart().getLogicPane().getCellAt(x, y).getHero();
+		if(hero == null) {
+			return false;
+		}
 		if(hero instanceof Water) {
 			return false;
 		}
-		return true;
-	}
-
-	@Override
-	public void showDiagonalMove() {
-		// TODO Auto-generated method stub
+		return canKillDiagonal(x, y);
 	}
 
 	@Override
@@ -29,5 +29,13 @@ public class SuperFire extends Fire {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public boolean canKillDiagonal(int x, int y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
 	
 }
