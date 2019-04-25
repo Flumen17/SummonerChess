@@ -31,19 +31,21 @@ public abstract class Hero {
 	}
 	
 	public void move(int x, int y) {
-		if(canMove(x, y)) {
-			
-		}
+		Main.gameScreen.getGamePart().getLogicPane().getCellAt(xPosition, yPosition).setHero(null);
+		Main.gameScreen.getGamePart().getLogicPane().getCellAt(x, y).setHero(this);
+		this.xPosition = x;
+		this.yPosition = y;
 	};
 	
 	public abstract boolean canKill(int x, int y);
 	
-	public void kill(Hero hero) {
-		
+	public void kill(int x, int y) {
+		Main.gameScreen.getGamePart().getLogicPane().getCellAt(x, y).getHero().die();
+		move(x, y);
 	}
 	
 	public void die() {
-		
+		Main.gameScreen.getGamePart().getLogicPane().getCellAt(this.xPosition, this.yPosition).setHero(null);
 	}
 
 	public int getxPosition() {
@@ -58,5 +60,8 @@ public abstract class Hero {
 		return color;
 	}
 	
+	public HeroType getHeroType() {
+		return type;
+	}
 	
 }
