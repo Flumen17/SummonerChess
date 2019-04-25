@@ -288,12 +288,23 @@ public class GameRunner {
 		Main.gameScreen.getActionPart().getSummonbtn().unHilight();
 		this.field.setInitial();
 		this.fieldUI.render();
+		if(anotherPlayer.getSummoner().isDie()) {
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			if(turn % 2 == 1)alert.setHeaderText("Player one Win");
+			else alert.setHeaderText("Player two Win");
+			alert.showAndWait();
+			Main.gameScene.switchScene(Main.homeScreen);
+			Main.gameScreen = null;
+			Main.gameRunner = null;
+		}
 		turn++;
 		if(turn%2 == 1) {
 			currentPlayer = playerOne;
+			anotherPlayer = playerTwo;
 		}
 		else {
 			currentPlayer = playerTwo;
+			anotherPlayer = playerOne;
 		}
 		playerOne.setStatus(PlayerControl.Status.NONE);
 		playerTwo.setStatus(PlayerControl.Status.NONE);

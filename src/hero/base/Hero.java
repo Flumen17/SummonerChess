@@ -12,6 +12,8 @@ public abstract class Hero {
 	
 	protected Color color;
 	
+	private boolean alive;
+	
 	public void showMove(){
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
@@ -25,6 +27,7 @@ public abstract class Hero {
 	public abstract boolean canMove(int x,int y);
 	
 	public Hero(int x, int y, Color color) {
+		alive = true;
 		this.xPosition = x;
 		this.yPosition = y;
 		this.color = color;
@@ -46,6 +49,7 @@ public abstract class Hero {
 	
 	public void die() {
 		Main.gameScreen.getGamePart().getLogicPane().getCellAt(this.xPosition, this.yPosition).setHero(null);
+		this.alive = false;
 	}
 
 	public int getxPosition() {
@@ -62,6 +66,10 @@ public abstract class Hero {
 	
 	public HeroType getHeroType() {
 		return type;
+	}
+	
+	public boolean isDie() {
+		return !alive;
 	}
 	
 }
