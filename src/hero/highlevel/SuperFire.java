@@ -49,12 +49,11 @@ public class SuperFire extends FireBase {
 	public boolean canKillDiagonal(int x, int y) {
 		Cell consider = Main.gameScreen.getGamePart().getLogicPane().getCellAt(x, y);
 
-		if((this.getxPosition()-x==this.getyPosition()-y)||(x-this.getxPosition()==this.getyPosition()-y))
-			  if (consider.getType() != Cell.Type.OUTFIELD && consider.getHero()!= null) 
-					if (consider.getHero().getColor() != this.getColor())return true;	
+		 if (consider.getType() != Cell.Type.OUTFIELD ) {
+			if((this.getxPosition()-x==this.getyPosition()-y)||(x-this.getxPosition()==this.getyPosition()-y))
+				if (consider.getHero()!= null && consider.getHero().getColor() != this.getColor())return true;	
+		 }
 		return false;
 	}
 
-	
-		
 }

@@ -43,7 +43,7 @@ public class Plant extends PlantBase implements SpreadMoveable, Sacrifice {
 		if (consider.getType() != Cell.Type.OUTFIELD) {
 
 			for (int i = -1; i <= 1; i += 2)
-				for (int j = -2; i <= 2 ; i += 4) {
+				for (int j = -2; j <= 2 ; j += 4) {
 						if (((x == this.getxPosition() + j) && (y == this.getyPosition() + i) )||
 							((x == this.getxPosition() + i) && (y == this.getyPosition() + j) )) {
 							if (consider.getHero() == null) return true;
