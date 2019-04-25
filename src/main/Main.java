@@ -3,6 +3,7 @@ package main;
 
 
 
+import gui.Images;
 import gui.scene.GameScene;
 import gui.scene.GameScreen;
 import gui.scene.HomeScreen;
@@ -47,6 +48,9 @@ public class Main extends Application {
 		stage.setResizable(false);
 		stage.sizeToScene();
 		stage.show();
+		new Thread(() ->  {
+			Images.loadResource();
+		}).start();
 	}	
 	
 }

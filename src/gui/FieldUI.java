@@ -46,53 +46,96 @@ public class FieldUI extends Canvas {
 				gc.fillRect(j * 100, i * 100, 100, 100);
 				Hero hero = field.getCellAt(i, j).getHero(); 
 				if(hero != null) {
-					if(hero instanceof FireBase) {
-						gc.setFill(Color.RED);
+					if(hero instanceof Summoner) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.summoner_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.summoner_WG, j*100, i*100);
+						}
+						
 					}
-					else if(hero instanceof WaterBase) {
-						gc.setFill(Color.BLUE);
+					if(hero instanceof Fire) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.fire_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.fire_WG, j*100, i*100);
+						}
 					}
-					else if(hero instanceof PlantBase) {
-						gc.setFill(Color.GREEN);
+					else if(hero instanceof Water) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.water_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.water_WG, j*100, i*100);
+						}
 					}
-					else if(hero instanceof Love) {
-						gc.setFill(Color.PINK);
-					}
-					else if(hero instanceof Summoner) {
-						gc.setFill(Color.YELLOW);
-					}
-					gc.fillOval(j*100+5, i*100+5, 90, 90);
-					gc.setFill(hero.getColor());
-					gc.fillOval(j*100+10, i*100+10, 80, 80);
-					if(hero instanceof FirePlant) {
-						gc.setFill(Color.GREEN);
-						gc.fillOval(j*100+25, i*100+25, 50, 50);
-					}
-					else if(hero instanceof WaterFire) {
-						gc.setFill(Color.RED);
-						gc.fillOval(j*100+25, i*100+25, 50, 50);
-					}
-					else if(hero instanceof PlantWater) {
-						gc.setFill(Color.BLUE);
-						gc.fillOval(j*100+25, i*100+25, 50, 50);
-					}
-					else if(hero instanceof Summoner) {
-						gc.setFill(Color.PINK);
-						gc.fillOval(j*100+25, i*100+25, 50, 50);
+					else if(hero instanceof Plant) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.plant_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.plant_WG, j*100, i*100);
+						}
 					}
 					else if(hero instanceof SuperFire) {
-						gc.setFill(Color.RED);
-						gc.fillOval(j*100+25, i*100+25, 50, 50);
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.superFire_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.superFire_WG, j*100, i*100);
+						}
 					}
 					else if(hero instanceof SuperWater) {
-						gc.setFill(Color.BLUE);
-						gc.fillOval(j*100+25, i*100+25, 50, 50);
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.superWater_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.superWater_WG, j*100, i*100);
+						}
 					}
 					else if(hero instanceof SuperPlant) {
-						gc.setFill(Color.GREEN);
-						gc.fillOval(j*100+25, i*100+25, 50, 50);
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.superPlant_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.superPlant_WG, j*100, i*100);
+						}
+					}
+					if(hero instanceof FirePlant) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.firePlant_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.firePlant_WG, j*100, i*100);
+						}
+					}
+					else if(hero instanceof WaterFire) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.waterFire_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.waterFire_WG, j*100, i*100);
+						}
+					}
+					else if(hero instanceof PlantWater) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.plantWater_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.plantWater_WG, j*100, i*100);
+						}
 					}
 					
+					else if(hero instanceof Love) {
+						if(hero.getColor() == Color.BLACK) {
+							gc.drawImage(Images.love_BG, j*100, i*100);
+						}
+						else {
+							gc.drawImage(Images.love_WG, j*100, i*100);
+						}
+					}
 				}
 			}
 		}
