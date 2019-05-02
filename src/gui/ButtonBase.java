@@ -1,28 +1,23 @@
 package gui;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.text.Font;
 
-public class ButtonBase extends Button{
-	
-	public ButtonBase() {
-		unHilight();
-	}
-	
-	public ButtonBase(String text) {
+public class ButtonBase extends Button {
+	public ButtonBase(String text, int width, int height, Image image, Font font) {
 		super(text);
-		unHilight();
+		this.setFont(font);
+		this.setPrefSize(width, height);
+		this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
+	}
+	public void changeBackground(Image image) {
+		this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 	}
 	
-	public void hilight() {
-		this.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-	}
-	
-	public void unHilight() {
-		this.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
-	}
 }

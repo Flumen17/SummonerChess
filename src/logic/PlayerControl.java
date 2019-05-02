@@ -3,41 +3,40 @@ package logic;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import hero.Summoner;
-import hero.base.Hero;
-import hero.base.HeroType;
+import heroBase.Hero;
+import heroBase.HeroType;
+import heroBase.hero.Summoner;
 import javafx.scene.paint.Color;
 import main.Main;
+import sharedObject.RenderableHolder;
 
 public class PlayerControl {
 	private List<Hero> heroes;
 	private Color color;
 	private Summoner summoner;
-	private int numFire, numWater, numPlant, numLove;
-	private Status status;
 	private Hero selectedHeroToMove, selectedSacrifice;
 	private HeroType selectedHeroToSummon;
-	
-	public enum Status{
-		NONE, SELECTHEROTOSUMMON, SELECTSACRIFICE, SELECTHEROTOMOVE, SUMMON, MOVE;
-	}
-	
-	public PlayerControl(int x, int y, Color color, Status status) {
+	private Flag flag;
+	private Tower tower;
+	private int x,y;
+		
+	public PlayerControl(int x, int y, Color color) {
 		heroes = new ArrayList<Hero>();
-		this.status = status;
-		numFire = 0;
-		numWater = 0;
-		numPlant = 0;
-		numLove = 1;
 		this.color = color;
 		summoner = new Summoner(x, y, color);
+		RenderableHolder.getInstance().add(summoner);
+		Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setHero(summoner);
 		heroes.add(summoner);
+		this.flag = null;
+		this.tower = null;
+		this.x = x;
+		this.y = y;
 	}
 	public void summonHero(int x, int y) {
 		Hero hero = selectedHeroToSummon.toHero(x, y, color);
 		heroes.add(hero);
-		Main.gameScreen.getGamePart().getLogicPane().getCellAt(x, y).setHero(hero);
+		Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setHero(hero);
+		RenderableHolder.getInstance().add(hero);
 	}
 	public Summoner getSummoner() {
 		return summoner;
@@ -48,24 +47,13 @@ public class PlayerControl {
 	public Color getColor() {
 		return color;
 	}
-	public int getNumFire() {
-		return numFire;
+	
+	public void setInitial() {
+		selectedHeroToMove = null;
+		selectedSacrifice = null;
+		selectedHeroToSummon = null;
 	}
-	public int getNumWater() {
-		return numWater;
-	}
-	public int getNumPlant() {
-		return numPlant;
-	}
-	public int getNumLove() {
-		return numLove;
-	}
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-	public Status getStatus() {
-		return status;
-	}
+	
 	public Hero getSelectedHeroToMove() {
 		return selectedHeroToMove;
 	}
@@ -74,18 +62,6 @@ public class PlayerControl {
 	}
 	public Hero getSelectedSacrifice() {
 		return selectedSacrifice;
-	}
-	public void setNumFire(int numFire) {
-		this.numFire = numFire;
-	}
-	public void setNumWater(int numWater) {
-		this.numWater = numWater;
-	}
-	public void setNumPlant(int numPlant) {
-		this.numPlant = numPlant;
-	}
-	public void setNumLove(int numLove) {
-		this.numLove = numLove;
 	}
 	public void setSelectedHeroToMove(Hero selectedHeroToMove) {
 		this.selectedHeroToMove = selectedHeroToMove;
@@ -96,5 +72,26 @@ public class PlayerControl {
 	public void setSelectedHeroToSummon(HeroType heroType) {
 		this.selectedHeroToSummon = heroType;
 	}
-	
+	public void setFlag(int x, int y) {
+		flag = new Flag(x, y, color);
+		RenderableHolder.getInstance().add(flag);
+		Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setFlag(flag);
+	}
+	public void setTower(int x, int y) {
+		tower = new Tower(x, y, color);
+		RenderableHolder.getInstance().add(tower);
+		Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setTower(tower);
+	}
+	public Flag getFlag() {
+		return flag;
+	}
+	public Tower getTower() {
+		return tower;
+	}
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
+	}
 }
