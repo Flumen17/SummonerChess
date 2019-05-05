@@ -1,7 +1,8 @@
 package heroBase.hero;
 
-import field.Cell;
-import gui.Images;
+import Object.Tower;
+import constant.Images;
+import field.cell.Cell;
 import heroBase.FireBase;
 import heroBase.Hero;
 import heroBase.HeroType;
@@ -11,7 +12,6 @@ import heroBase.property.Sacrifice;
 import heroBase.property.SpreadMoveable;
 import heroBase.superHero.SuperPlant;
 import javafx.scene.paint.Color;
-import logic.Tower;
 import main.Main;
 
 public class Plant extends PlantBase implements SpreadMoveable, Sacrifice {
@@ -25,6 +25,16 @@ public class Plant extends PlantBase implements SpreadMoveable, Sacrifice {
 
 	@Override
 	public boolean canMove(int x, int y) {
+		Cell cell = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
+		if(cell.getType() == Cell.Type.OUTFIELD){
+			return false;
+		}
+		if(cell.getTower() != null || cell.getHero() != null) {
+			return false;
+		}
+		if(cell.getFlag() != null && this.getFlag() != null) {
+			return false;
+		}
 		return canMoveSpread(x, y);
 	}
 
@@ -35,7 +45,7 @@ public class Plant extends PlantBase implements SpreadMoveable, Sacrifice {
 		if(hero == null && tower == null) {
 			return false;
 		}
-		if(hero instanceof FireBase || hero instanceof SuperPlant || hero instanceof PlantWater) {
+		if(hero != null && (hero instanceof FireBase || hero instanceof SuperPlant || hero instanceof PlantWater)) {
 			return false;
 		}
 		return canKillSpread(x, y);
@@ -43,35 +53,43 @@ public class Plant extends PlantBase implements SpreadMoveable, Sacrifice {
 
 	@Override
 	public boolean canMoveSpread(int x, int y) {
-		Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-
-		if (consider.getType() != Cell.Type.OUTFIELD) {
-			if(consider.getTower() != null)return false;
-			for (int i = -1; i <= 1; i += 2)
-				for (int j = -2; j <= 2 ; j += 4) {
-						if (((x == this.getRow() + j) && (y == this.getCol() + i) )||
-							((x == this.getRow() + i) && (y == this.getCol() + j) )) {
-							if (consider.getHero() == null) return true;
-						}
+		for(int i = -1; i <= 1; i += 2) {
+			for(int j = -2; j <= 2 ; j += 4) {
+				if(((x == this.getRow() + j) && (y == this.getCol() + i) ) || ((x == this.getRow() + i) && (y == this.getCol() + j))) {
+					return true;
 				}
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public boolean canKillSpread(int x, int y) {
-		Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-
-		if (consider.getType() != Cell.Type.OUTFIELD) {
-
-			for (int i = -1; i <= 1; i += 2)
-				for (int j = -2; j <= 2 ; j += 4) {
-						if (((x == this.getRow() + j) && (y == this.getCol() + i) )||
-							((x == this.getRow() + i) && (y == this.getCol() + j) )) {
-							if (consider.getHero().getColor()!= this.getColor()) return true;
-							if(consider.getTower() != null && consider.getTower().getColor() != this.getColor())return true;
+		Cell cell = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
+		if (cell.getType() == Cell.Type.OUTFIELD) {
+			return false;
+		}
+		if(cell.getHero() != null) {
+			for(int i = -1; i <= 1; i += 2) {
+				for(int j = -2; j <= 2 ; j += 4) {
+					if(((x == this.getRow() + j) && (y == this.getCol() + i) ) || ((x == this.getRow() + i) && (y == this.getCol() + j) )) {
+						if (cell.getHero().getColor() != this.getColor()) {
+							return true;
 						}
+					}
 				}
+			}
+		}
+		else if(cell.getTower() != null) {
+			for(int i = -1; i <= 1; i += 2) {
+				for(int j = -2; j <= 2 ; j += 4) {
+					if(((x == this.getRow() + j) && (y == this.getCol() + i) ) || ((x == this.getRow() + i) && (y == this.getCol() + j) )) {
+						if (cell.getTower().getColor() != this.getColor()) {
+							return true;
+						}
+					}
+				}
+			}
 		}
 		return false;
 	}

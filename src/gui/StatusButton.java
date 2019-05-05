@@ -1,8 +1,8 @@
 package gui;
 
+import constant.Images;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -16,8 +16,6 @@ public class StatusButton extends Button{
 	}
 	
 	private Status status;
-	
-	private Image image;
 	
 	public StatusButton(Status status) {
 		setStatus(status);

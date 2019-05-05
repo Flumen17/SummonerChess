@@ -3,6 +3,10 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import constant.Fonts;
+import constant.Images;
+import constant.Numbers;
+import constant.Sounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,11 +19,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 public class SettingBox extends HBox {
+	
 	private Button leftButton, rightButton;
 	private List<Label> Labels;
 	private int currentLabel;
+	
 	public SettingBox(String text1, String text2, String text3) {
-		this.setMinWidth(450);
+		this.setMinWidth(Numbers.SETTINGBOX_WIDTH);
 		Label label1 = createLabel(text1);
 		Label label2 = createLabel(text2);
 		Label label3 = createLabel(text3);
@@ -46,27 +52,32 @@ public class SettingBox extends HBox {
 		setLeftRightButton();
 		this.getChildren().addAll(leftButton, label1, rightButton);
 	}
+	
 	private void setLeftRightButton() {
 		leftButton = new Button();
-		leftButton.setPrefSize(30, 30);
+		leftButton.setPrefSize(Numbers.ARROW_SIZE, Numbers.ARROW_SIZE);
 		leftButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 		leftButton.setGraphic(new ImageView(Images.leftArrow));
 		leftButton.setOnAction(e->{
+			Sounds.click2.play();
 			currentLabel--;
-			if(currentLabel < 0)currentLabel += Labels.size();
+			if(currentLabel < 0) {
+				currentLabel += Labels.size();
+			}
 			this.switchLabel();
 		});
-		
 		rightButton = new Button();
-		rightButton.setPrefSize(30, 30);
+		rightButton.setPrefSize(Numbers.ARROW_SIZE, Numbers.ARROW_SIZE);
 		rightButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 		rightButton.setGraphic(new ImageView(Images.rightArrow));
 		rightButton.setOnAction(e->{
+			Sounds.click2.play();
 			currentLabel++;
 			currentLabel %= Labels.size();
 			this.switchLabel();
 		});
 	}
+	
 	public Label createLabel(String label) {
 		Label t;
 		t = new Label(label);
@@ -75,10 +86,12 @@ public class SettingBox extends HBox {
 		t.setAlignment(Pos.CENTER);
 		return t;
 	}
+	
 	public void switchLabel() {
 		this.getChildren().clear();
 		this.getChildren().addAll(leftButton, Labels.get(currentLabel), rightButton);
 	}
+	
 	public String getCurrentLabelText() {
 		return Labels.get(currentLabel).getText();
 	}

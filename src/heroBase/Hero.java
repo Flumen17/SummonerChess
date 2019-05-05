@@ -1,36 +1,36 @@
 package heroBase;
 
-import field.Cell;
+import Object.Flag;
+import Object.GameObject;
+import constant.Numbers;
+import constant.Sounds;
+import field.cell.Cell;
+import heroBase.hero.Summoner;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import logic.Flag;
-import logic.GameObject;
 import main.Main;
-import sharedObject.IRenderable;
+import sharedObject.RenderableHolder;
 
 public abstract class Hero extends GameObject {
 	
 	protected HeroType type; 
-	
-	private boolean alive;
-	
 	private Flag flag;
 	
-	
 	public Hero(int x, int y, Color color) {
-		alive = true;
+		if(!(this instanceof Summoner))Sounds.summon.play();
 		this.row = x;
 		this.col = y;
-		this.position = new Point2D(y * 100, x * 100);
-		this.size = new Point2D(100, 100);
+		this.position = new Point2D(y * Numbers.CELL_SIZE, x * Numbers.CELL_SIZE);
+		this.size = new Point2D(Numbers.CELL_SIZE, Numbers.CELL_SIZE);
 		this.color = color;
+		this.destroyed = false;
+		Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setHero(this);;
+		RenderableHolder.getInstance().add(this);
 	}
 	
 	public void showMove(){
-		for(int i = 0; i < 9; i++) {
-			for(int j = 0; j < 10; j++) {
+		for(int i = 0; i < Numbers.ROWS; i++) {
+			for(int j = 0; j < Numbers.COLUMNS; j++) {
 				if(canMove(i, j))Main.gameScene.getGamePart().getLogicPane().getCellAt(i, j).setType(Cell.Type.MOVEABLE);
 				if(canKill(i, j))Main.gameScene.getGamePart().getLogicPane().getCellAt(i, j).setType(Cell.Type.KILLABLE);
 			}
@@ -40,17 +40,18 @@ public abstract class Hero extends GameObject {
 	public abstract boolean canMove(int x,int y);
 	
 	public void move(int x, int y) {
+		Sounds.move.play();
 		Main.gameScene.getGamePart().getLogicPane().getCellAt(row, col).setHero(null);
 		Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setHero(this);
 		this.row = x;
 		this.col = y;
-		this.setPostion(y * 100, x * 100);
-		if(flag != null) {
-			Main.gameScene.getGamePart().getLogicPane().getCellAt(row, col).setFlag(null);
+		this.setPostion(y * Numbers.CELL_SIZE, x * Numbers.CELL_SIZE);
+		if(this.flag != null) {
+			Main.gameScene.getGamePart().getLogicPane().getCellAt(this.flag.getRow(), this.flag.getCol()).setFlag(null);
 			Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setFlag(this.flag);
-			flag.setRow(x);
-			flag.setCol(y);
-			flag.setPostion(y * 100, x * 100);
+			this.flag.setRow(x);
+			this.flag.setCol(y);
+			this.flag.setPostion(y * Numbers.CELL_SIZE, x * Numbers.CELL_SIZE);
 		}
 	};
 	
@@ -69,17 +70,20 @@ public abstract class Hero extends GameObject {
 	
 	public void die() {
 		Main.gameScene.getGamePart().getLogicPane().getCellAt(this.row, this.col).setHero(null);
-		this.alive = false;
+		this.destroyed = true;
 	}
 	
 	public HeroType getHeroType() {
 		return type;
 	}
 	
-	public boolean isDie() {
-		return !alive;
-	}
 	public void setFlag(Flag flag) {
+		if(flag != null) {
+			this.opacity = 0.8;
+		}
+		else {
+			this.opacity = 1.0;
+		}
 		this.flag = flag;
 	}
 	public Flag getFlag() {
@@ -88,18 +92,7 @@ public abstract class Hero extends GameObject {
 
 	@Override
 	public int getZ() {
-		return 2;
+		return 1;
 	}
-
-	@Override
-	public boolean isVisible() {
-		return true;
-	}
-
-	@Override
-	public boolean isDestroyed() {
-		return !alive;
-	}
-	
 	
 }

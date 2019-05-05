@@ -1,5 +1,9 @@
 package gui;
 
+import constant.Images;
+import constant.Numbers;
+import constant.Sounds;
+import exception.SelectedHeroToSummonException;
 import heroBase.HeroType;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -11,19 +15,20 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import main.Main;
+import sharedObject.RenderableHolder;
 
 public class HeroButton extends Button {
 	
 	private HeroType type;
-	private boolean active;
+	private boolean active, selected;
 	
 	public HeroButton(HeroType heroType) {
 		Rectangle buttonShape = new Rectangle();
-		buttonShape.setWidth(120);
-		buttonShape.setHeight(120);
-		buttonShape.setArcWidth(20);
-		buttonShape.setArcHeight(20);
-		this.setPrefSize(120, 120);
+		buttonShape.setWidth(Numbers.HEROBUTTON_SIZE);
+		buttonShape.setHeight(Numbers.HEROBUTTON_SIZE);
+		buttonShape.setArcWidth(Numbers.ARC_SIZE);
+		buttonShape.setArcHeight(Numbers.ARC_SIZE);
+		this.setPrefSize(Numbers.HEROBUTTON_SIZE, Numbers.HEROBUTTON_SIZE);
 		this.setShape(buttonShape);
 		this.unHilight();
 		if(heroType == HeroType.FIRE || heroType == HeroType.WATER || heroType == HeroType.PLANT) {
@@ -35,24 +40,39 @@ public class HeroButton extends Button {
 		this.type = heroType;
 		switchHero(heroType, Color.BLACK);
 		this.setOnAction(e->{
-			Main.gameRunner.clickHeroButton(this);
+			try {
+				Main.gameRunner.clickHeroButton(this);
+				Sounds.heroButtonClick.play();
+			} catch (SelectedHeroToSummonException e1) {
+				Sounds.invalidClick.play();
+				AlertBox alertBox = new AlertBox(e1.getMessage());
+				RenderableHolder.getInstance().add(alertBox);
+			}
+		});
+		this.setOnMouseEntered(e->{
+			if(!selected && active) {
+				this.setBackground(new Background(new BackgroundFill(Color.BISQUE, CornerRadii.EMPTY, Insets.EMPTY)));
+			}
+		});
+		this.setOnMouseExited(e->{
+			if(!selected && active) {
+				this.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
+			}
 		});
 	}
 	
 	public void hilight() {
-		this.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+		if(active) {
+			this.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
+			selected = true;
+		}	
 	}
 	
 	public void unHilight() {
-		this.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
-	}
-	
-	public HeroType getHeroType() {
-		return type;
-	}
-	
-	public void setImage(Image image) {
-		this.setGraphic(new ImageView(image));
+		if(active) {
+			this.setBackground(new Background(new BackgroundFill(Color.BEIGE, CornerRadii.EMPTY, Insets.EMPTY)));
+			selected = false;
+		}
 	}
 	
 	public void switchHero(HeroType heroType, Color color) {
@@ -69,7 +89,7 @@ public class HeroButton extends Button {
 				case FIREPLANT : this.setImage(Images.firePlant_BF); break;
 				case PLANTWATER : this.setImage(Images.plantWater_BF); break;
 				case LOVE : this.setImage(Images.love_BF); break;
-				default :
+				default : this.setImage(null);
 			}
 		}
 		else {
@@ -84,19 +104,33 @@ public class HeroButton extends Button {
 			case FIREPLANT : this.setImage(Images.firePlant_WF); break;
 			case PLANTWATER : this.setImage(Images.plantWater_WF); break;
 			case LOVE : this.setImage(Images.love_WF); break;
-			default :
+			default : this.setImage(null);
 			}
 		}
+		if(!active) {
+			this.setOpacity(0.5);
+			this.setBackground(new Background(new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+		}
+		else {
+			this.setOpacity(1.0);
+			this.unHilight();
+		}
 	}
-
-	public boolean isActive() {
-		return active;
+	
+	public HeroType getHeroType() {
+		return type;
 	}
-
+	
+	public void setImage(Image image) {
+		this.setGraphic(new ImageView(image));
+	}
+	
 	public void setActive(boolean active) {
 		this.active = active;
 	}
 	
-	
-	
+	public boolean isActive() {
+		return active;
+	}
+
 }

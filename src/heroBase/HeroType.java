@@ -13,6 +13,7 @@ import heroBase.superHero.SuperWater;
 import javafx.scene.paint.Color;
 
 public enum HeroType {
+	
 	FIRE,
 	WATER,
 	PLANT,

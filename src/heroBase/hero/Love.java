@@ -1,13 +1,13 @@
 package heroBase.hero;
 
-import field.Cell;
-import gui.Images;
+import Object.Tower;
+import constant.Images;
+import field.cell.Cell;
 import heroBase.Hero;
 import heroBase.HeroType;
 import heroBase.property.DiagonalMoveable;
 import heroBase.property.StraightMoveable;
 import javafx.scene.paint.Color;
-import logic.Tower;
 import main.Main;
 
 public class Love extends Hero implements StraightMoveable, DiagonalMoveable {
@@ -21,6 +21,16 @@ public class Love extends Hero implements StraightMoveable, DiagonalMoveable {
 
 	@Override
 	public boolean canMove(int x, int y) {
+		Cell cell = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
+		if(cell.getType() == Cell.Type.OUTFIELD){
+			return false;
+		}
+		if(cell.getTower() != null || cell.getHero() != null) {
+			return false;
+		}
+		if(cell.getFlag() != null && this.getFlag() != null) {
+			return false;
+		}
 		return canMoveStraight(x, y) || canMoveDiagonal(x, y);
 	}
 
@@ -36,54 +46,49 @@ public class Love extends Hero implements StraightMoveable, DiagonalMoveable {
 
 	@Override
 	public boolean canMoveDiagonal(int x, int y) {
-		Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-
-		if (consider.getType() != Cell.Type.OUTFIELD) {
-			if(consider.getTower() != null)return false;
-			for (int i = -1; i <= 1; i += 2)
-				for (int j = -1; j <= 1; j += 2)
-					if ((x == this.getRow() + i) && (y == this.getCol() + j)) {
-						if (consider.getHero() == null) return true;
+		for(int i = -1; i <= 1; i += 2) {
+			for(int j = -1; j <= 1; j += 2) {
+					if((x == this.getRow() + i) && (y == this.getCol() + j)) {
+						return true;
 					}
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public boolean canKillDiagonal(int x, int y) {
-		Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-		if (consider.getType() != Cell.Type.OUTFIELD && consider.getTower()!= null) {
-
-			for (int i = -1; i <= 1; i += 2)
-				for (int j = -1; j <= 1; j += 2)
-					if ((x == this.getRow() + i) && (y == this.getCol() + j) 
-							&& (consider.getTower().getColor()!= this.getColor())) {
-							return true;
-					}
+		Cell cell = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
+		if(cell.getType() == Cell.Type.OUTFIELD) {
+			return false;
 		}
-		if (consider.getType() != Cell.Type.OUTFIELD && consider.getHero()!= null) {
-
-			for (int i = -1; i <= 1; i += 2)
-				for (int j = -1; j <= 1; j += 2)
-					if ((x == this.getRow() + i) && (y == this.getCol() + j) 
-							&& (consider.getHero().getColor()!= this.getColor())) {
-							return true;
+		if (cell.getHero() != null) {
+			for(int i = -1; i <= 1; i += 2) {
+				for(int j = -1; j <= 1; j += 2) {
+					if((x == this.getRow() + i) && (y == this.getCol() + j) && (cell.getHero().getColor()!= this.getColor())) {
+						return true;
 					}
+				}
+			}
+		}
+		else if(cell.getTower() != null) {
+			for (int i = -1; i <= 1; i += 2) {
+				for (int j = -1; j <= 1; j += 2) {
+					if ((x == this.getRow() + i) && (y == this.getCol() + j) && (cell.getTower().getColor()!= this.getColor())) {
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public boolean canMoveStraight(int x, int y) {
-		Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-
-		if (consider.getType() != Cell.Type.OUTFIELD) {
-			if(consider.getTower() != null)return false;
-			for (int i = -1; i <= 1; i += 2) {
-				if (((x == this.getRow() + i) && (y == this.getCol()))||
-					((x == this.getRow()) && (y == this.getCol() + i))){
-					if (consider.getHero() == null)return true;
-				}
+		for(int i = -1; i <= 1; i += 2) {
+			if(((x == this.getRow() + i) && (y == this.getCol()))||
+			   ((x == this.getRow()) && (y == this.getCol() + i))){
+				return true;
 			}
 		}
 		return false;
@@ -91,26 +96,29 @@ public class Love extends Hero implements StraightMoveable, DiagonalMoveable {
 
 	@Override
 	public boolean canKillStraight(int x, int y) {
-		Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-		if (consider.getType() != Cell.Type.OUTFIELD && consider.getTower()!= null) {
-
-			for (int i = -1; i <= 1; i += 2) {
-				if (((x == this.getRow() + i) && (y == this.getCol()))||
-					((x == this.getRow()) && (y == this.getCol() + i))){
-					if (consider.getTower().getColor()!= this.getColor())return true;
-				}
-			}
-			
+		Cell cell = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
+		if(cell.getType() == Cell.Type.OUTFIELD) {
+			return false;
 		}
-		if (consider.getType() != Cell.Type.OUTFIELD && consider.getHero()!= null) {
-
-			for (int i = -1; i <= 1; i += 2) {
-				if (((x == this.getRow() + i) && (y == this.getCol()))||
-					((x == this.getRow()) && (y == this.getCol() + i))){
-					if (consider.getHero().getColor()!= this.getColor())return true;
+		if(cell.getHero()!= null) {
+			for(int i = -1; i <= 1; i += 2) {
+				if(((x == this.getRow() + i) && (y == this.getCol()))||
+				   ((x == this.getRow()) && (y == this.getCol() + i))){
+					if (cell.getHero().getColor()!= this.getColor()) {
+						return true;
+					}
 				}
 			}
-			
+		}
+		else if(cell.getTower() != null) {
+			for(int i = -1; i <= 1; i += 2) {
+				if(((x == this.getRow() + i) && (y == this.getCol()))||
+				   ((x == this.getRow()) && (y == this.getCol() + i))){
+					if (cell.getTower().getColor() != this.getColor()) {
+						return true;
+					}
+				}
+			}
 		}
 		return false;
 	}

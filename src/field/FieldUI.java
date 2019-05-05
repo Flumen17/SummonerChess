@@ -1,43 +1,39 @@
 package field;
 
-import gui.Images;
-import heroBase.FireBase;
-import heroBase.Hero;
-import heroBase.PlantBase;
-import heroBase.WaterBase;
-import heroBase.hero.Fire;
-import heroBase.hero.Love;
-import heroBase.hero.Plant;
-import heroBase.hero.Summoner;
-import heroBase.hero.Water;
-import heroBase.hybridHero.FirePlant;
-import heroBase.hybridHero.PlantWater;
-import heroBase.hybridHero.WaterFire;
-import heroBase.superHero.SuperFire;
-import heroBase.superHero.SuperPlant;
-import heroBase.superHero.SuperWater;
+import java.util.ArrayList;
+import java.util.List;
+
+import constant.Numbers;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import sharedObject.IRenderable;
 import sharedObject.RenderableHolder;
 
 public class FieldUI extends Canvas {
 	
-	GraphicsContext gc;
-	
+	private GraphicsContext gc;
+	private List<IRenderable> destroyedObjects;
 	public FieldUI() {	
-		gc = this.getGraphicsContext2D();
-		this.setHeight(900);
-		this.setWidth(1000);
+		this.gc = this.getGraphicsContext2D();
+		this.destroyedObjects = new ArrayList<IRenderable>();
+		this.setHeight(Numbers.FIELD_HEIGHT);
+		this.setWidth(Numbers.FIELD_WIDTH);
 	}
 	
 	public void draw() {
-		gc.clearRect(0, 0, 1000, 900);
-		for(int i = 0; i < RenderableHolder.getInstance().getGameObjects().size(); i++) {
-			if(RenderableHolder.getInstance().getGameObjects().get(i).isVisible() && !RenderableHolder.getInstance().getGameObjects().get(i).isDestroyed()) {
-				RenderableHolder.getInstance().getGameObjects().get(i).draw(gc);
-			};
+		gc.clearRect(0, 0, Numbers.FIELD_WIDTH, Numbers.FIELD_HEIGHT);
+		for(IRenderable instance : RenderableHolder.getInstance().getGameObjects()){
+			if(!instance.isDestroyed()) {
+				instance.draw(gc);
+			}
+			else {
+				destroyedObjects.add(instance);
+			}
 		}
+		for(int i = 0; i < destroyedObjects.size(); i++) {
+			RenderableHolder.getInstance().getGameObjects().remove(destroyedObjects.get(i));
+		}
+		destroyedObjects.clear();
 	}
 	
 }

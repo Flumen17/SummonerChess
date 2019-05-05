@@ -1,29 +1,9 @@
 package main;
 
-
-
-
-import gui.Fonts;
-import gui.Images;
-import heroBase.FireBase;
-import heroBase.Hero;
-import heroBase.PlantBase;
-import heroBase.WaterBase;
-import heroBase.hero.Fire;
-import heroBase.hero.Plant;
-import heroBase.hero.Water;
-import heroBase.hybridHero.FirePlant;
-import heroBase.hybridHero.PlantWater;
-import heroBase.hybridHero.WaterFire;
-import heroBase.property.DiagonalMoveable;
-import heroBase.property.Sacrifice;
-import heroBase.property.SpreadMoveable;
-import heroBase.property.StraightMoveable;
-import heroBase.superHero.SuperFire;
-import heroBase.superHero.SuperPlant;
-import heroBase.superHero.SuperWater;
+import constant.Fonts;
+import constant.Images;
+import constant.Sounds;
 import javafx.application.Application;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.GameHolder;
 import logic.GameRunner;
@@ -57,7 +37,7 @@ public class Main extends Application {
 		new Thread(() ->  {
 			Fonts.loadResource();
 			Images.loadResource();
-			
+			Sounds.loadResource();
 		}).start();
 	}	
 	

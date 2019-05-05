@@ -1,14 +1,13 @@
 package heroBase.superHero;
 
-import field.Cell;
-import gui.Images;
+import Object.Tower;
+import constant.Images;
+import field.cell.Cell;
+import heroBase.FireBase;
 import heroBase.Hero;
 import heroBase.HeroType;
 import heroBase.PlantBase;
-import heroBase.hero.Fire;
-import heroBase.hero.Plant;
 import javafx.scene.paint.Color;
-import logic.Tower;
 import main.Main;
 
 public class SuperPlant extends PlantBase {
@@ -22,6 +21,16 @@ public class SuperPlant extends PlantBase {
 	
 	@Override
 	public boolean canMove(int x, int y) {
+		Cell cell = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
+		if(cell.getType() == Cell.Type.OUTFIELD){
+			return false;
+		}
+		if(cell.getTower() != null || cell.getHero() != null) {
+			return false;
+		}
+		if(cell.getFlag() != null && this.getFlag() != null) {
+			return false;
+		}
 		return canMoveSpread(x, y);
 	}
 	
@@ -32,7 +41,7 @@ public class SuperPlant extends PlantBase {
 		if(hero == null && tower == null) {
 			return false;
 		}
-		if(hero instanceof Fire) {
+		if(hero instanceof FireBase) {
 			return false;
 		}
 		return canKillSpread(x, y);
@@ -40,18 +49,13 @@ public class SuperPlant extends PlantBase {
 
 	@Override
 	public boolean canMoveSpread(int x, int y) {
-		// TODO Auto-generated method stub
-		Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-
-		if (consider.getType() != Cell.Type.OUTFIELD) {
-			if(consider.getTower() != null)return false;
-			for (int i = -2; i <= 2; i++) {
-				for (int j = -2; j <= 2; j++)
-				{
-					if ((x == this.getRow() + i) && (y == this.getCol() + j)) {
-						if(1>=i&&i>=-1&&1>=j&&j>=-1) return false;
-						else if (consider.getHero() == null)return true;
+		for(int i = -2; i <= 2; i++) {
+			for(int j = -2; j <= 2; j++) {
+				if((x == this.getRow() + i) && (y == this.getCol() + j)) {
+					if(1 >= i && i >= -1 && 1 >= j && j >= -1) {
+						return false;
 					}
+					else return true;
 				}
 			}
 		}
@@ -60,27 +64,39 @@ public class SuperPlant extends PlantBase {
 
 	@Override
 	public boolean canKillSpread(int x, int y) {
-			// TODO Auto-generated method stub
-			Cell consider = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
-	
-			if (consider.getType() != Cell.Type.OUTFIELD) {
-	
-				for (int i = -2; i <= 2; i++) {
-					for (int j = -2; j <= 2; j++)
-					{
-						if ((x == this.getRow() + i) && (y == this.getCol() + j)) {
-							if(1>=i&&i>=-1&&1>=j&&j>=-1) return false;
-							else{
-								if (consider.getHero().getColor() != this.getColor())return true;
-								if(consider.getTower() != null && consider.getTower().getColor() != this.getColor())return true;
-							}
-							
+		Cell cell = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y);
+		if(cell.getType() == Cell.Type.OUTFIELD) {
+			return false;
+		}
+		if(cell.getHero() != null) {
+			for(int i = -2; i <= 2; i++) {
+				for(int j = -2; j <= 2; j++) {
+					if((x == this.getRow() + i) && (y == this.getCol() + j)) {
+						if(1 >= i && i >= -1 && 1 >= j && j >= -1) {
+							return false;
+						}
+						else if(cell.getHero().getColor() != this.getColor()) {
+							return true;
 						}
 					}
 				}
 			}
-			return false;
 		}
+		else if(cell.getTower() != null) {
+			for(int i = -2; i <= 2; i++) {
+				for(int j = -2; j <= 2; j++) {
+					if((x == this.getRow() + i) && (y == this.getCol() + j)) {
+						if(1 >= i && i >= -1 && 1 >= j && j >= -1) {
+							return false;
+						}
+						else if(cell.getTower().getColor() != this.getColor()) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 
-	
 }

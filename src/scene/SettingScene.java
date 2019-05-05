@@ -1,70 +1,53 @@
 package scene;
 
+import constant.Fonts;
+import constant.Images;
+import constant.Numbers;
 import gui.ButtonBase;
-import gui.Fonts;
-import gui.Images;
 import gui.SettingBox;
-import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import logic.GameHolder;
-import logic.GameRunner;
 import main.Main;
-import sharedObject.RenderableHolder;
 
 public class SettingScene extends Scene {
+	
 	HBox root;
 	GraphicsContext gc;
 	GameHolder gameHolder;
 	AnimationTimer animation;
-	ButtonBase ok;
+	ButtonBase okButton;
+	
 	public SettingScene() {
-		super(new HBox(), 1600, 1000);
+		super(new HBox(), Numbers.WIN_WIDTH, Numbers.WIN_HEIGHT);
 		gameHolder = new GameHolder();
 		root = (HBox) getRoot();
 		root.setAlignment(Pos.CENTER);
 		root.setBackground(new Background(new BackgroundImage(Images.settingBackground, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 		VBox buttons = new VBox(50);
-		buttons.setPrefSize(500, 1000);
+		buttons.setPrefSize(Numbers.SETTINGBOX_WIDTH, Numbers.WIN_HEIGHT);
 		buttons.setAlignment(Pos.CENTER);
-		Canvas bg = new Canvas(1100, 1000);
+		Canvas bg = new Canvas(Numbers.SIMULATEFIELD_WIDTH, Numbers.WIN_HEIGHT);
 		gc = bg.getGraphicsContext2D();
 		draw();
 		SettingBox setGameMode = new SettingBox("Summon The God", "Steal The Flag", "Tower Destroy");
 		SettingBox setGameField = new SettingBox("Squarizer", "Turbine", "Florist");
 		SettingBox setGameTheme = new SettingBox("Love", "Fire", "Water", "Plant");
-		ok = new ButtonBase("ok", 270, 90, Images.unPressedButton, Fonts.settingFont);
-		ok.setOnMousePressed(e->{
-			this.getOk().changeBackground(Images.pressedButton);
-		});
-		ok.setOnMouseEntered(e->{
-			this.getOk().changeBackground(Images.overButton);
-		});
-		ok.setOnMouseExited(e->{
-			this.getOk().changeBackground(Images.unPressedButton);
-		});
-		ok.setOnMouseReleased(e->{
+		okButton = new ButtonBase("ok", 270, 90, Images.unPressedButton, Images.overButton, Images.pressedButton, Fonts.settingFont);
+		okButton.setOnAction(e->{
 			if(Main.homeScene != null) {
 				Main.sceneHolder.switchScene(Main.homeScene);
 			}
@@ -85,7 +68,7 @@ public class SettingScene extends Scene {
 		VBox box3 = new VBox(10);
 		box3.setAlignment(Pos.CENTER);
 		box3.getChildren().addAll(label3, setGameTheme);
-		buttons.getChildren().addAll(box1, box2, box3, ok);
+		buttons.getChildren().addAll(box1, box2, box3, okButton);
 		root.getChildren().addAll(buttons, bg);
 		animation = new AnimationTimer() {
 			public void handle(long now) {
@@ -123,7 +106,6 @@ public class SettingScene extends Scene {
 			}
 		};
 		animation.start();
-		
 	}
 	
 	public void draw() {
@@ -173,13 +155,17 @@ public class SettingScene extends Scene {
 				image = Images.loveFlorist;
 			}
 		}
+		gc.setFill(Color.BLACK);
+		gc.fillRect(52.5, 115, 995, 770);
 		gc.drawImage(image, 62.5, 125, 975, 750);
 	}
 	
 	public GameHolder getGameHolder() {
 		return this.gameHolder;
 	}
-	public ButtonBase getOk() {
-		return ok;
+	
+	public ButtonBase getOkButton() {
+		return okButton;
 	}
+	
 }

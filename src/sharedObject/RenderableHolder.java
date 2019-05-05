@@ -28,14 +28,9 @@ public class RenderableHolder {
 		gameObjects.add(gameObject);
 		Collections.sort(gameObjects, comparator);
 	}
-	
-	public void update() {
-		for(int i = 0; i < gameObjects.size(); i++) {
-			
-		}
-	}
-	
+
 	public List<IRenderable> getGameObjects(){
 		return gameObjects;
 	}
+	
 }

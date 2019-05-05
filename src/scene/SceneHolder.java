@@ -1,10 +1,9 @@
 package scene;
 
-import javafx.scene.Parent;
+import constant.Sounds;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import main.Main;
-//import main.Main;
 
 public class SceneHolder {
 	
@@ -12,13 +11,24 @@ public class SceneHolder {
 	private Stage stage;
 	
 	public SceneHolder(Stage stage) {
-		super();
 		this.stage = stage;
 		Main.loadingScene = new LoadingScene();
 		stage.setScene(Main.loadingScene);
 	}
 	
 	public void switchScene(Scene scene) {
+		if(Sounds.homeScene.isPlaying())Sounds.homeScene.stop();
+		if(Sounds.gameScene.isPlaying())Sounds.gameScene.stop();
+		if(Sounds.settingScene.isPlaying())Sounds.settingScene.stop();
+		if(scene instanceof HomeScene) {
+			Sounds.homeScene.play();
+		}
+		else if(scene instanceof GameScene) {
+			Sounds.gameScene.play();
+		}
+		else if(scene instanceof SettingScene) {
+			Sounds.settingScene.play();
+		}
 		stage.setScene(scene);
 	}
 	

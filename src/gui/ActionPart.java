@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import constant.Fonts;
+import constant.Images;
+import constant.Numbers;
+import constant.Sounds;
 import heroBase.HeroType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,15 +27,14 @@ import javafx.scene.paint.Color;
 
 public class ActionPart extends VBox {
 	
-	private int selectedAction, currentBox;
-	private HeroType selectedHero;
+	private int currentBox;
 	private Button leftButton, rightButton;
-	private StatusButton statusButton;
 	private List<HeroButton> heroButtonList;
-	private HBox box;
-	private VBox vbox;
 	private SummonBox heroBox, superHeroBox, hybridHeroBox;
-	private Label heroLabel, superHeroLabel, hybridHeroLabel;
+	private StatusButton statusButton;
+	private Label heroLabel, superHeroLabel, hybridHeroLabel, turnLabel;
+	private HBox summonBox;
+	private VBox box;
 	
 	public ActionPart() {
 		heroButtonList = new ArrayList<HeroButton>();
@@ -62,6 +65,8 @@ public class ActionPart extends VBox {
 		for(int i = 0; i < hybridHeroBox.getHeroButtonList().size(); i++) {
 			heroButtonList.add(hybridHeroBox.getHeroButtonList().get(i));
 		}
+		turnLabel = new Label("player one");
+		turnLabel.setFont(Fonts.gameFont2);
 		heroLabel = new Label("Hero");
 		heroLabel.setFont(Fonts.gameFont);
 		superHeroLabel = new Label("Super Hero");
@@ -69,73 +74,60 @@ public class ActionPart extends VBox {
 		hybridHeroLabel = new Label("Hybrid Hero");
 		hybridHeroLabel.setFont(Fonts.gameFont);
 		leftButton = new Button();
-		leftButton.setPrefSize(30, 30);
+		leftButton.setPrefSize(Numbers.ARROW_SIZE, Numbers.ARROW_SIZE);
 		leftButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 		leftButton.setGraphic(new ImageView(Images.leftArrow));
 		leftButton.setOnAction(e->{
+			Sounds.click2.play();
 			this.currentBox--;
-			if(this.currentBox < 0)this.currentBox+=3;
+			if(this.currentBox < 0) {
+				this.currentBox+=3;
+			}
 			this.switchBox();
 		});
-		
 		rightButton = new Button();
-		rightButton.setPrefSize(30, 30);
+		rightButton.setPrefSize(Numbers.ARROW_SIZE, Numbers.ARROW_SIZE);
 		rightButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
 		rightButton.setGraphic(new ImageView(Images.rightArrow));
 		rightButton.setOnAction(e->{
+			Sounds.click2.play();
 			this.currentBox++;
 			this.currentBox%=3;
 			this.switchBox();
 		});
-		box = new HBox(30);
+		summonBox = new HBox(30);
+		summonBox.setAlignment(Pos.CENTER);
+		summonBox.setMinSize(Numbers.ACTIONPART_WIDTH, Numbers.SUMMONBOX_HEIGHT);
+		summonBox.getChildren().addAll(leftButton, heroBox, rightButton);
+		box = new VBox(30);
 		box.setAlignment(Pos.CENTER);
-		box.setMinSize(300, 500);
-		box.getChildren().addAll(leftButton, heroBox, rightButton);
-		vbox = new VBox(30);
-		vbox.setAlignment(Pos.CENTER);
-		vbox.setMinSize(300,  100);
-		vbox.getChildren().addAll(heroLabel, box);
-		currentBox = 0;
+		box.getChildren().addAll(turnLabel, heroLabel, summonBox);
 		statusButton = new StatusButton(StatusButton.Status.MOVE);
-		statusButton.setPrefSize(150, 150);
+		statusButton.setPrefSize(Numbers.STATUSBUTTON_SIZE, Numbers.STATUSBUTTON_SIZE);
+		this.setFocused(false);
+		this.currentBox = 0;
 		this.setSpacing(100);
 		this.setAlignment(Pos.CENTER);
-		this.getChildren().addAll(vbox, statusButton);
-		this.setPrefSize(300, 1000);
-		this.setBackground(new Background(new BackgroundImage(Images.actionBackground, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(null, 0, false, null, 0, false), new BackgroundSize(1300, 1000, false, false, true, false))));
+		this.getChildren().addAll(box, statusButton);
+		this.setPrefSize(Numbers.ACTIONPART_WIDTH, Numbers.WIN_HEIGHT);
+		this.setBackground(new Background(new BackgroundImage(Images.actionBackground, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 	}
 	
 	public void switchBox() {
-		this.vbox.getChildren().clear();
 		this.box.getChildren().clear();
+		this.summonBox.getChildren().clear();
 		if(this.currentBox == 0) {
-			this.box.getChildren().addAll(leftButton, heroBox, rightButton);
-			this.vbox.getChildren().addAll(this.heroLabel, this.box);
+			this.summonBox.getChildren().addAll(leftButton, heroBox, rightButton);
+			this.box.getChildren().addAll(this.turnLabel, this.heroLabel, this.summonBox);
 		}
 		else if(this.currentBox == 1) {
-			this.box.getChildren().addAll(leftButton, superHeroBox, rightButton);
-			this.vbox.getChildren().addAll(this.superHeroLabel, this.box);
+			this.summonBox.getChildren().addAll(leftButton, superHeroBox, rightButton);
+			this.box.getChildren().addAll(this.turnLabel, this.superHeroLabel, this.summonBox);
 		}
 		else if(this.currentBox == 2) {
-			this.box.getChildren().addAll(leftButton, hybridHeroBox, rightButton);
-			this.vbox.getChildren().addAll(this.hybridHeroLabel, this.box);
+			this.summonBox.getChildren().addAll(leftButton, hybridHeroBox, rightButton);
+			this.box.getChildren().addAll(this.turnLabel, this.hybridHeroLabel, this.summonBox);
 		}
-	}
-
-	public int getSelectedAction() {
-		return selectedAction;
-	}
-
-	public HeroType getSelectedHero() {
-		return selectedHero;
-	}
-
-	public StatusButton getStatusButton() {
-		return statusButton;
-	}
-	
-	public List<HeroButton> getHeroButtonList(){
-		return this.heroButtonList;
 	}
 	
 	public void unHilight() {
@@ -145,6 +137,12 @@ public class ActionPart extends VBox {
 	}
 	
 	public void switchTurn(Color color) {
+		if(color == Color.BLACK) {
+			turnLabel.setText("player one");
+		}
+		else {
+			turnLabel.setText("player two");
+		}
 		Random rand = new Random();
 		int r = rand.nextInt(3);
 		if(r == 0) {
@@ -165,4 +163,13 @@ public class ActionPart extends VBox {
 		this.currentBox = 0;
 		switchBox();
 	}
+	
+	public StatusButton getStatusButton() {
+		return statusButton;
+	}
+	
+	public List<HeroButton> getHeroButtonList(){
+		return this.heroButtonList;
+	}
+	
 }
