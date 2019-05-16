@@ -1,6 +1,7 @@
 package heroBase.hybridHero;
 
 import Object.Tower;
+import animation.HeroAnimation;
 import constant.Images;
 import field.cell.Cell;
 import heroBase.Hero;
@@ -16,8 +17,16 @@ public class WaterFire extends WaterBase implements DiagonalMoveable {
 	public WaterFire(int x, int y, Color color) {
 		super(x, y, color);
 		this.type = HeroType.WATERFIRE;
-		if(color == Color.BLACK)this.image = Images.waterFire_BG;
-		else this.image = Images.waterFire_WG;
+		if(color == Color.BLACK) {
+			this.image = Images.waterFire_BG;
+			animationList = Images.blackWaterFire;
+			
+		}
+		else {
+			this.image = Images.waterFire_WG;
+			animationList = Images.whiteWaterFire;
+		}
+		this.heroAnimation = new HeroAnimation(animationList, this);
 	}
 
 	@Override
@@ -43,6 +52,9 @@ public class WaterFire extends WaterBase implements DiagonalMoveable {
 			return false;
 		}
 		if(hero instanceof PlantBase) {
+			return false;
+		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
 			return false;
 		}
 		return canKillStraight(x, y) || canKillDiagonal(x, y);

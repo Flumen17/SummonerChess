@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Object.GodHero;
+import button.MusicButton;
+import button.SoundButton;
 import constant.Images;
 import constant.Sounds;
 import exception.SelectedCellException;
@@ -30,11 +32,12 @@ public class GameRunner {
 	private int turn;
 	private PlayerController playerOne, playerTwo, currentPlayer, anotherPlayer;
 	private AnimationTimer animation;
-	private boolean end;
+	private boolean end, active;
 
 	public GameRunner() {
 		field = Main.gameScene.getGamePart().getLogicPane();
 		end = false;
+		active = true;
 		switch(Main.gameHolder.getGameField()) {
 			case SQUARIZER : 
 				playerOne = new PlayerController(4, 1, Color.BLACK); playerTwo = new PlayerController(4, 8, Color.WHITE); 
@@ -90,7 +93,10 @@ public class GameRunner {
 	
 	
 	public void clickCell(Cell cell) throws SelectedCellException {
-		if(actionPart.getStatusButton().getStatus() == StatusButton.Status.MOVE) {
+		if(!active) {
+			return;
+		}
+		else if(actionPart.getStatusButton().getStatus() == StatusButton.Status.MOVE) {
 			actionPart.unHilight();
 			if(currentPlayer.getSelectedHeroToMove() == null) {
 				field.setInitial();
@@ -120,12 +126,20 @@ public class GameRunner {
 					cell.getHero().showMove();
 				}
 				else if(hero.canMove(cell.getRow(), cell.getCol())) {
+					active = false;
 					hero.move(cell.getRow(), cell.getCol());
-					endTurn();
+					hero.getMoveAnimation().setOnFinished(e->{
+						active = true;
+						endTurn();
+					});
 				}
 				else if(hero.canKill(cell.getRow(), cell.getCol())) {
+					active = false;
 					hero.kill(cell.getRow(), cell.getCol());
-					endTurn();
+					hero.getMoveAnimation().setOnFinished(e->{
+						active = true;
+						endTurn();
+					});
 				}
 				else {
 					if(cell.getFlag() != null && cell.getHero() == null && cell.getTower() == null) {
@@ -138,7 +152,8 @@ public class GameRunner {
 			
 		}
 		else if(actionPart.getStatusButton().getStatus() == StatusButton.Status.SUMMON){
-			if(currentPlayer.getSelectedHeroToSummon() == null) {
+			if(!active) {}
+			else if(currentPlayer.getSelectedHeroToSummon() == null) {
 				throw new SelectedCellException("PLEASE SELECT HERO TO SUMMON");
 			}
 			else {
@@ -208,6 +223,9 @@ public class GameRunner {
 	}
 	
 	public void clickHeroButton(HeroButton heroButton) throws SelectedHeroToSummonException {
+		if(!active) {
+			return;
+		}
 		if(actionPart.getStatusButton().getStatus() != StatusButton.Status.SUMMONGOD) {
 			actionPart.unHilight();
 			field.setInitial();
@@ -242,6 +260,9 @@ public class GameRunner {
 	}
 	
 	public void clickStatusButton() {
+		if(!active) {
+			return;
+		}
 		actionPart.unHilight();
 		field.setInitial();
 		currentPlayer.setInitial();
@@ -260,6 +281,9 @@ public class GameRunner {
 	}
 	
 	public void holdingFlag(Cell cell) throws SelectedCellException {
+		if(!active) {
+			return;
+		}
 		if(cell.getHero() != null) {
 			Hero hero = cell.getHero();
 			if(currentPlayer.getColor() == hero.getColor()) {
@@ -430,9 +454,12 @@ public class GameRunner {
 		Main.gameScene.getWinningScene().setOnFinished(e->{
 			Main.sceneHolder.switchScene(Main.homeScene);
 			Main.gameRunner.animation.stop();
+			SoundButton.soundButtons.remove(Main.gameScene.getGamePart().getSoundButton());
+			MusicButton.musicButtons.remove(Main.gameScene.getGamePart().getMusicButton());
 			Main.gameScene = null;
 			Main.gameRunner = null;
 			RenderableHolder.getInstance().getGameObjects().clear();
+			
 		});
 		
 	}

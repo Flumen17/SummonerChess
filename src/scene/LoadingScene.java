@@ -6,8 +6,11 @@ import com.sun.javafx.tk.Toolkit;
 import constant.Fonts;
 import constant.Images;
 import constant.Numbers;
+import javafx.animation.AnimationTimer;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -34,14 +37,6 @@ public class LoadingScene extends Scene {
 			double imageProgress = Images.getProgress();
 			progress = imageProgress * 0.1 + progress * 0.9;
 			if (progress >= 0.99) progress = 1;
-			if(progress > 0.99 && imageProgress > 0.99) {
-				if(opacity < 0.1) {
-					Main.homeScene = new HomeScene();
-					Main.sceneHolder.switchScene(Main.homeScene);
-					timeline.stop();
-				}
-				opacity *= 0.9;
-			}
 			gc.clearRect(0, 0, loadingPane.getWidth(), loadingPane.getHeight());
 			gc.drawImage(Images.loadingBackground, 0, 0);
 			gc.setLineWidth(2);
@@ -71,6 +66,25 @@ public class LoadingScene extends Scene {
 			gc.setFill(Color.DARKORANGE);
 			gc.fillRoundRect(500, 530, progress * 500 + 90, 50, 30, 30);
 			count++;
+			if(progress > 0.99 && imageProgress > 0.99) {
+				if(opacity>0.1)opacity *= 0.99;
+				else opacity *= 0.95;
+				if(opacity <= 0.001)opacity = 0.0;
+				gc.setGlobalAlpha(1.0 - opacity);
+				gc.drawImage(Images.loveHomeBackground, 0, 1000 - (1.0 - opacity) * 1000);
+				gc.drawImage(Images.fireHomeBackground, 0, (1.0 - opacity) * 1000 - 1000);
+				gc.drawImage(Images.waterHomeBackground, 0, 1000 - (1.0 - opacity) * 1000);
+				gc.drawImage(Images.plantHomeBackground, 0, (1.0 - opacity) * 1000 - 1000);
+				if(opacity <= 0.1) {
+					gc.drawImage(Images.tabletHomeBackground, 0, (1.0 - opacity * 10) * 1000 - 1000);
+					gc.drawImage(Images.summonersHomeBackground, 0, (1.0 - opacity * 10) * 1000 - 1000);
+				}
+				if(opacity == 0.0) {
+					Main.homeScene = new HomeScene();
+					Main.sceneHolder.switchScene(Main.homeScene);
+					timeline.stop();
+				}
+			}
 		}));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.play();

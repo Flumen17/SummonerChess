@@ -1,6 +1,10 @@
 package heroBase.hybridHero;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Object.Tower;
+import animation.HeroAnimation;
 import constant.Images;
 import field.cell.Cell;
 import heroBase.FireBase;
@@ -8,16 +12,25 @@ import heroBase.Hero;
 import heroBase.HeroType;
 import heroBase.WaterBase;
 import heroBase.property.SpreadMoveable;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import main.Main;
 
 public class FirePlant extends FireBase implements SpreadMoveable {
-
+	
 	public FirePlant(int x, int y, Color color) {
 		super(x, y, color);
 		this.type = HeroType.FIREPLANT;
-		if(color == Color.BLACK)this.image = Images.firePlant_BG;
-		else this.image = Images.firePlant_WG;
+		if(color == Color.BLACK) {
+			this.image = Images.firePlant_BG;
+			animationList = Images.blackFirePlant;
+			
+		}
+		else {
+			this.image = Images.firePlant_WG;
+			animationList = Images.whiteFirePlant;
+		}
+		this.heroAnimation = new HeroAnimation(animationList, this);
 	}
 
 	@Override
@@ -43,6 +56,9 @@ public class FirePlant extends FireBase implements SpreadMoveable {
 			return false;
 		}
 		if(hero instanceof WaterBase) {
+			return false;
+		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
 			return false;
 		}
 		return canKillDiagonal(x, y) || canKillSpread(x, y);

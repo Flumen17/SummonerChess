@@ -1,6 +1,7 @@
 package heroBase.superHero;
 
 import Object.Tower;
+import animation.HeroAnimation;
 import constant.Images;
 import field.cell.Cell;
 import heroBase.FireBase;
@@ -15,8 +16,16 @@ public class SuperFire extends FireBase {
 	public SuperFire(int x, int y, Color color) {
 		super(x, y, color);
 		this.type = HeroType.SUPERFIRE;
-		if(color == Color.BLACK)this.image = Images.superFire_BG;
-		else this.image = Images.superFire_WG;
+		if(color == Color.BLACK) {
+			this.image = Images.superFire_BG;
+			animationList = Images.blackSuperFire;
+			
+		}
+		else {
+			this.image = Images.superFire_WG;
+			animationList = Images.whiteSuperFire;
+		}
+		this.heroAnimation = new HeroAnimation(animationList, this);
 	}
 	
 	@Override
@@ -42,6 +51,9 @@ public class SuperFire extends FireBase {
 			return false;
 		}
 		if(hero instanceof WaterBase) {
+			return false;
+		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
 			return false;
 		}
 		return canKillDiagonal(x, y);

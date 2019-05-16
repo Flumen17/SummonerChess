@@ -1,5 +1,8 @@
 package constant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.image.Image;
 
 public class Images {
@@ -31,13 +34,29 @@ public class Images {
 	public static Image bHoldBFlag, bHoldWFlag, wHoldBFlag, wHoldWFlag;
 	public static Image unpressedHomeButton, hoverHomeButton, pressedHomeButton;
 	public static Image unpressedHowToPlayButton, hoverHowToPlayButton, pressedHowToPlayButton;
-	public static Image unpressedMusicButton, hoverMusicButton, pressedMusicButton;
-	public static Image unpressedSoundButton, hoverSoundButton, pressedSoundButton;
+	public static Image unpressedMusicButton, hoverMusicButton, pressedMusicButton, muteMusicButton;
+	public static Image unpressedSoundButton, hoverSoundButton, pressedSoundButton, muteSoundButton;
+	public static Image unpressedExitButton, hoverExitButton, pressedExitButton;
+	public static Image unpressedBackButton, hoverBackButton, pressedBackButton;
 	public static Image winningFrame;
+	public static Image whiteFirePlant1, whiteFirePlant2, whiteFirePlant3, whiteFirePlant4;
+	public static Image fireHomeBackground, waterHomeBackground, plantHomeBackground, loveHomeBackground, logoHomebackground, summonersHomeBackground, tabletHomeBackground;
+	public static final Image[] whiteFirePlant = new Image[8], blackFirePlant = new Image[8], whiteSuperFire = new Image[8], blackSuperFire = new Image[8];
+	public static final Image[] whiteWaterFire = new Image[8], blackWaterFire = new Image[8], whiteSuperWater = new Image[8], blackSuperWater = new Image[8];
+	public static final Image[] whitePlantWater = new Image[8], blackPlantWater = new Image[8], whiteSuperPlant = new Image[8], blackSuperPlant = new Image[8];
+	public static final Image[] blackLove = new Image[4], whiteLove = new Image[4];
+	public static final Image[] blackSummoner = new Image[8], whiteSummoner = new Image[8];
+	public static final Image[] tutorial = new Image[14];
 	private static double progress = 0;
 	static{
 		loadingBackground = loadImage("LoadingBackground", 1600, 1000);
-		logo = loadImage("logo", 300, 150);
+		fireHomeBackground = loadImage("FireHomeBackground", 1600, 1000);
+		waterHomeBackground = loadImage("WaterHomeBackground", 1600, 1000);
+		plantHomeBackground = loadImage("PlantHomeBackground", 1600, 1000);
+		loveHomeBackground = loadImage("LoveHomeBackground", 1600, 1000);
+		logoHomebackground = loadImage("LogoHomeBackground", 1600, 1000);
+		summonersHomeBackground = loadImage("SummonersHomeBackground", 1600, 1000);
+		tabletHomeBackground = loadImage("TabletHomeBackground", 1600, 1000);
 	}
 	public static void loadResource() {
 		summoner_BF = loadImage("Summoner_BF",120, 120);
@@ -98,11 +117,9 @@ public class Images {
 		waterBackground = loadImage("WaterBackground", 1300, 1000);
 		plantBackground = loadImage("PlantBackground", 1300, 1000);
 		actionBackground = loadImage("newActionBackground", 300, 1000);
-		setProgress(0.8);
 		loveCell = loadImage("LoveCell", 100, 100);
 		loveCell2 = loadImage("LoveCell2", 100, 100);
 		waterCell = loadImage("WaterCell", 100, 100);
-		setProgress(0.9);
 		leftArrow = loadImage("LeftArrow", 30, 30);
 		rightArrow = loadImage("RightArrow", 30, 30);
 		moveButton = loadImage("MoveButton", 150, 150);
@@ -119,6 +136,7 @@ public class Images {
 		plantSquarizer = loadImage("PlantSquarizer", 975, 750);
 		plantTurbine = loadImage("PlantTurbine", 975, 750);
 		plantFlorist = loadImage("PlantFlorist", 975, 750);
+		setProgress(0.8);
 		bGod = loadImage("BGod", 300, 450);
 		bFlag = loadImage("BFlag", 100, 100);
 		bTower = loadImage("BTower", 100, 100);
@@ -145,15 +163,47 @@ public class Images {
 		unpressedMusicButton = loadImage("UnpressedMusicButton", 60, 60);
 		hoverMusicButton = loadImage("HoverMusicButton", 60, 60);
 		pressedMusicButton = loadImage("PressedMusicButton", 60, 60);
+		muteMusicButton = loadImage("MuteMusicButton", 60, 60);
 		unpressedSoundButton = loadImage("UnpressedSoundButton", 60, 60);
 		hoverSoundButton = loadImage("HoverSoundButton", 60, 60);
 		pressedSoundButton = loadImage("PressedSoundButton", 60, 60);
+		muteSoundButton = loadImage("MuteSoundButton", 60, 60);
+		unpressedExitButton = loadImage("UnpressedExitButton", 60, 60);
+		hoverExitButton = loadImage("HoverExitButton", 60, 60);
+		pressedExitButton = loadImage("PressedExitButton", 60, 60);
+		unpressedBackButton = loadImage("UnpressedBackButton", 60, 60);
+		hoverBackButton = loadImage("HoverBackButton", 60, 60);
+		pressedBackButton = loadImage("PressedBackButton", 60, 60);
 		winningFrame = loadImage("WinningFrame", 400, 400);
+		setProgress(0.9);
+		for(int i = 1; i <= 8; i++) {
+			whiteFirePlant[i-1] = loadImage("WhiteFirePlant" + i, 100, 100);
+			blackFirePlant[i-1] = loadImage("BlackFirePlant" + i, 100, 100);
+			whiteSuperFire[i-1] = loadImage("WhiteSuperFire" + i, 100, 100);
+			blackSuperFire[i-1] = loadImage("BlackSuperFire" + i, 100, 100);
+			whiteWaterFire[i-1] = loadImage("WhiteWaterFire" + i, 100, 100);
+			blackWaterFire[i-1] = loadImage("BlackWaterFire" + i, 100, 100);
+			whiteSuperWater[i-1] = loadImage("WhiteSuperWater" + i, 100, 100);
+			blackSuperWater[i-1] = loadImage("BlackSuperWater" + i, 100, 100);
+			whitePlantWater[i-1] = loadImage("WhitePlantWater" + i, 100, 100);
+			blackPlantWater[i-1] = loadImage("BlackPlantWater" + i, 100, 100);
+			whiteSuperPlant[i-1] = loadImage("WhiteSuperPlant" + i, 100, 100);
+			blackSuperPlant[i-1] = loadImage("BlackSuperPlant" + i, 100, 100);
+			blackSummoner[i-1] = loadImage("BlackSummoner" + i, 100, 100);
+			whiteSummoner[i-1] = loadImage("WhiteSummoner" + i, 100, 100);
+		}
+		for(int i = 1; i <= 4; i++) {
+			blackLove[i-1] = loadImage("BlackLove" + i, 100, 100);
+			whiteLove[i-1] = loadImage("WhiteLove" + i, 100, 100);
+		}
+		for(int i = 1; i <= 14; i++) {
+			tutorial[i-1] = loadImage("Tutorial" + i, 1600, 1000);
+		}
 		setProgress(1.0);
 	}
 	
 	public static Image loadImage(String path, double width, double height){
-        return new Image(ClassLoader.getSystemResource("image/" + path + ".png").toString(), width, height, true, true);
+        return new Image(ClassLoader.getSystemResourceAsStream("image/" + path + ".png"), width, height, true, true);
     }
 	
 	public static void setProgress(double progress) {

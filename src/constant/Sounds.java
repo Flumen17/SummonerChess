@@ -5,7 +5,7 @@ import javafx.scene.media.AudioClip;
 public class Sounds {
 	public static AudioClip click, click2, invalidClick;
 	public static AudioClip summon, heroButtonClick, winning, move, select;
-	public static AudioClip homeScene, settingScene, gameScene;
+	public static AudioClip homeScene, settingScene, gameScene, tutorial;
 	public static void loadResource() {
 		click = loadSound("click1.wav");
 		click2 = loadSound("click2.wav");
@@ -26,6 +26,9 @@ public class Sounds {
 		gameScene = loadSound("gamescene.mp3");
 		gameScene.setCycleCount(AudioClip.INDEFINITE);
 		gameScene.setVolume(0.2);
+		tutorial = loadSound("tutorial.mp3");
+		tutorial.setCycleCount(AudioClip.INDEFINITE);
+		tutorial.setVolume(0.2);
 	}
 	public static AudioClip loadSound(String path) {
 		return new AudioClip(ClassLoader.getSystemResource("sound/" + path).toString());

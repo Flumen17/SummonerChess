@@ -25,4 +25,6 @@ public class Numbers {
 	public static final int TOWER_LIFE = 5;
 	public static final int SIMULATEFIELD_WIDTH = 1100;
 	public static final int BLOODBAR_HEIGHT = 10;
+	public static final int HERO_ANIMATION_DURATION = 750;
+	public static final int HERO_MOVE_DURATION = 1000;
 }

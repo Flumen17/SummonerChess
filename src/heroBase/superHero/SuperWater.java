@@ -1,6 +1,7 @@
 package heroBase.superHero;
 
 import Object.Tower;
+import animation.HeroAnimation;
 import constant.Images;
 import field.cell.Cell;
 import heroBase.Hero;
@@ -15,8 +16,16 @@ public class SuperWater extends WaterBase {
 	public SuperWater(int x, int y, Color color) {
 		super(x, y, color);
 		this.type = HeroType.SUPERWATER;
-		if(color == Color.BLACK)this.image = Images.superWater_BG;
-		else this.image = Images.superWater_WG;
+		if(color == Color.BLACK) {
+			this.image = Images.superWater_BG;
+			animationList = Images.blackSuperWater;
+			
+		}
+		else {
+			this.image = Images.superWater_WG;
+			animationList = Images.whiteSuperWater;
+		}
+		this.heroAnimation = new HeroAnimation(animationList, this);
 	}
 
 	@Override
@@ -42,6 +51,9 @@ public class SuperWater extends WaterBase {
 			return false;
 		}
 		if(hero instanceof PlantBase) {
+			return false;
+		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
 			return false;
 		}
 		return canKillStraight(x, y);

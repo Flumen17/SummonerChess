@@ -1,12 +1,17 @@
 package heroBase;
 
+import java.util.List;
+
 import Object.Flag;
 import Object.GameObject;
+import animation.HeroAnimation;
+import animation.MoveAnimation;
 import constant.Numbers;
 import constant.Sounds;
 import field.cell.Cell;
 import heroBase.hero.Summoner;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import main.Main;
 import sharedObject.RenderableHolder;
@@ -15,6 +20,9 @@ public abstract class Hero extends GameObject {
 	
 	protected HeroType type; 
 	private Flag flag;
+	protected Image[] animationList;
+	protected HeroAnimation heroAnimation;
+	protected MoveAnimation moveAnimation;
 	
 	public Hero(int x, int y, Color color) {
 		if(!(this instanceof Summoner))Sounds.summon.play();
@@ -43,16 +51,17 @@ public abstract class Hero extends GameObject {
 		Sounds.move.play();
 		Main.gameScene.getGamePart().getLogicPane().getCellAt(row, col).setHero(null);
 		Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setHero(this);
-		this.row = x;
-		this.col = y;
-		this.setPostion(y * Numbers.CELL_SIZE, x * Numbers.CELL_SIZE);
+		moveAnimation = new MoveAnimation(position.getX() + Numbers.CELL_SIZE / 2, position.getY() + Numbers.CELL_SIZE / 2, Numbers.CELL_SIZE * ((double)y + 0.5), Numbers.CELL_SIZE * ((double)x + 0.5), this);
 		if(this.flag != null) {
 			Main.gameScene.getGamePart().getLogicPane().getCellAt(this.flag.getRow(), this.flag.getCol()).setFlag(null);
 			Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).setFlag(this.flag);
+			this.flag.move(x, y);
 			this.flag.setRow(x);
 			this.flag.setCol(y);
 			this.flag.setPostion(y * Numbers.CELL_SIZE, x * Numbers.CELL_SIZE);
 		}
+		this.row = x;
+		this.col = y;
 	};
 	
 	public abstract boolean canKill(int x, int y);
@@ -70,6 +79,10 @@ public abstract class Hero extends GameObject {
 	
 	public void die() {
 		Main.gameScene.getGamePart().getLogicPane().getCellAt(this.row, this.col).setHero(null);
+		if(this.flag != null) {
+			flag.unhold();
+		}
+		if(heroAnimation != null)this.heroAnimation.stop();
 		this.destroyed = true;
 	}
 	
@@ -90,6 +103,13 @@ public abstract class Hero extends GameObject {
 		return flag;
 	}
 
+	public HeroAnimation getHeroAnimation() {
+		return heroAnimation;
+	}
+
+	public MoveAnimation getMoveAnimation() {
+		return moveAnimation;
+	}
 	@Override
 	public int getZ() {
 		return 1;

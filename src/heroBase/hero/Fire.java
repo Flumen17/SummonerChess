@@ -48,6 +48,9 @@ public class Fire extends FireBase implements DiagonalMoveable, Sacrifice {
 		if(hero != null && (hero instanceof WaterBase || hero instanceof SuperFire || hero instanceof FirePlant)) {
 			return false;
 		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
+			return false;
+		}
 		return canKillDiagonal(x, y);
 	}
 
@@ -60,10 +63,10 @@ public class Fire extends FireBase implements DiagonalMoveable, Sacrifice {
 				}
 			}
 		}
-		if(((x == this.getRow() + 2) && (y == this.getCol() + 2) && canMoveDiagonal(x - 1, y - 1))||
-		   ((x == this.getRow() + 2) && (y == this.getCol() - 2) && canMoveDiagonal(x - 1, y + 1))||
-		   ((x == this.getRow() - 2) && (y == this.getCol() + 2) && canMoveDiagonal(x + 1, y - 1))||
-		   ((x == this.getRow() - 2) && (y == this.getCol() - 2) && canMoveDiagonal(x + 1, y + 1))) {						
+		if(((x == this.getRow() + 2) && (y == this.getCol() + 2) && canMove(x - 1, y - 1))||
+		   ((x == this.getRow() + 2) && (y == this.getCol() - 2) && canMove(x - 1, y + 1))||
+		   ((x == this.getRow() - 2) && (y == this.getCol() + 2) && canMove(x + 1, y - 1))||
+		   ((x == this.getRow() - 2) && (y == this.getCol() - 2) && canMove(x + 1, y + 1))) {						
 			return true;
 		}
 		return false;
@@ -83,10 +86,10 @@ public class Fire extends FireBase implements DiagonalMoveable, Sacrifice {
 					}	
 				}
 			}
-			if (((x == this.getRow() + 2) && (y == this.getCol() + 2) && canMoveDiagonal(x - 1, y - 1))||
-				((x == this.getRow() + 2) && (y == this.getCol() - 2) && canMoveDiagonal(x - 1, y + 1))||
-				((x == this.getRow() - 2) && (y == this.getCol() + 2) && canMoveDiagonal(x + 1, y - 1))||
-				((x == this.getRow() - 2) && (y == this.getCol() - 2) && canMoveDiagonal(x + 1, y + 1))){						
+			if (((x == this.getRow() + 2) && (y == this.getCol() + 2) && canMove(x - 1, y - 1))||
+				((x == this.getRow() + 2) && (y == this.getCol() - 2) && canMove(x - 1, y + 1))||
+				((x == this.getRow() - 2) && (y == this.getCol() + 2) && canMove(x + 1, y - 1))||
+				((x == this.getRow() - 2) && (y == this.getCol() - 2) && canMove(x + 1, y + 1))){						
 				if (cell.getHero().getColor() != this.getColor()) {
 					return true;
 				}
@@ -100,10 +103,10 @@ public class Fire extends FireBase implements DiagonalMoveable, Sacrifice {
 					}	
 				}
 			}
-			if (((x == this.getRow() + 2) && (y == this.getCol() + 2) && canMoveDiagonal(x - 1, y - 1))||
-				((x == this.getRow() + 2) && (y == this.getCol() - 2) && canMoveDiagonal(x - 1, y + 1))||
-				((x == this.getRow() - 2) && (y == this.getCol() + 2) && canMoveDiagonal(x + 1, y - 1))||
-				((x == this.getRow() - 2) && (y == this.getCol() - 2) && canMoveDiagonal(x + 1, y + 1))){						
+			if (((x == this.getRow() + 2) && (y == this.getCol() + 2) && canMove(x - 1, y - 1))||
+				((x == this.getRow() + 2) && (y == this.getCol() - 2) && canMove(x - 1, y + 1))||
+				((x == this.getRow() - 2) && (y == this.getCol() + 2) && canMove(x + 1, y - 1))||
+				((x == this.getRow() - 2) && (y == this.getCol() - 2) && canMove(x + 1, y + 1))){						
 				if (cell.getTower().getColor() != this.getColor()) {
 					return true;
 				}

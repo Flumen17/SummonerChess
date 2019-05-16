@@ -36,8 +36,9 @@ public class Main extends Application {
 		stage.show();
 		new Thread(() ->  {
 			Fonts.loadResource();
-			Images.loadResource();
 			Sounds.loadResource();
+			Images.loadResource();
+			
 		}).start();
 	}	
 	

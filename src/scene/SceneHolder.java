@@ -17,9 +17,11 @@ public class SceneHolder {
 	}
 	
 	public void switchScene(Scene scene) {
+		currentScene = scene;
 		if(Sounds.homeScene.isPlaying())Sounds.homeScene.stop();
 		if(Sounds.gameScene.isPlaying())Sounds.gameScene.stop();
 		if(Sounds.settingScene.isPlaying())Sounds.settingScene.stop();
+		if(Sounds.tutorial.isPlaying())Sounds.tutorial.stop();
 		if(scene instanceof HomeScene) {
 			Sounds.homeScene.play();
 		}
@@ -28,6 +30,9 @@ public class SceneHolder {
 		}
 		else if(scene instanceof SettingScene) {
 			Sounds.settingScene.play();
+		}
+		else if(scene instanceof TutorialScene) {
+			Sounds.tutorial.play();
 		}
 		stage.setScene(scene);
 	}

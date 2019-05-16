@@ -1,9 +1,9 @@
 package scene;
 
+import button.ButtonBase;
 import constant.Fonts;
 import constant.Images;
 import constant.Numbers;
-import gui.ButtonBase;
 import gui.SettingBox;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;

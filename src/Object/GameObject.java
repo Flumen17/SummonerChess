@@ -55,6 +55,14 @@ public abstract class GameObject implements IRenderable {
 		return position;
 	}
 	
+	public void setSize(double x, double y) {
+		size = new Point2D(x, y);
+	}
+	
+	public Point2D getSize(double x, double y) {
+		return size;
+	}
+	
 	public void setImage(Image image) {
 		this.image = image;
 	}

@@ -48,6 +48,9 @@ public class Plant extends PlantBase implements SpreadMoveable, Sacrifice {
 		if(hero != null && (hero instanceof FireBase || hero instanceof SuperPlant || hero instanceof PlantWater)) {
 			return false;
 		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
+			return false;
+		}
 		return canKillSpread(x, y);
 	}
 

@@ -48,6 +48,9 @@ public class Water extends WaterBase implements StraightMoveable, Sacrifice {
 		if(hero != null && (hero instanceof PlantBase || hero instanceof SuperWater || hero instanceof WaterFire)) {
 			return false;
 		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
+			return false;
+		}
 		return canKillStraight(x, y);
 	}
 

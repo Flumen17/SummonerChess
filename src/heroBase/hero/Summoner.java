@@ -1,6 +1,7 @@
 package heroBase.hero;
 
 import Object.Tower;
+import animation.HeroAnimation;
 import constant.Images;
 import field.cell.Cell;
 import heroBase.Hero;
@@ -15,8 +16,16 @@ public class Summoner extends Hero implements StraightMoveable, DiagonalMoveable
 	public Summoner(int x, int y, Color color) {
 		super(x, y, color);
 		this.type = HeroType.SUMMONER;
-		if(color == Color.BLACK)this.image = Images.summoner_BG;
-		else this.image = Images.summoner_WG;
+		if(color == Color.BLACK) {
+			this.image = Images.summoner_BG;
+			animationList = Images.blackSummoner;
+			
+		}
+		else {
+			this.image = Images.summoner_WG;
+			animationList = Images.whiteSummoner;
+		}
+		this.heroAnimation = new HeroAnimation(animationList, this);
 	}
 
 	@Override
@@ -39,6 +48,9 @@ public class Summoner extends Hero implements StraightMoveable, DiagonalMoveable
 		Tower tower = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).getTower();
 		Hero hero = Main.gameScene.getGamePart().getLogicPane().getCellAt(x, y).getHero();
 		if(hero == null && tower == null) {
+			return false;
+		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
 			return false;
 		}
 		return canKillStraight(x, y) || canKillDiagonal(x, y);

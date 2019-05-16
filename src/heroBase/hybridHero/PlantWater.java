@@ -1,6 +1,7 @@
 package heroBase.hybridHero;
 
 import Object.Tower;
+import animation.HeroAnimation;
 import constant.Images;
 import field.cell.Cell;
 import heroBase.FireBase;
@@ -16,8 +17,16 @@ public class PlantWater extends PlantBase implements StraightMoveable {
 	public PlantWater(int x, int y, Color color) {
 		super(x, y, color);
 		this.type = HeroType.PLANTWATER;
-		if(color == Color.BLACK)this.image = Images.plantWater_BG;
-		else this.image = Images.plantWater_WG;
+		if(color == Color.BLACK) {
+			this.image = Images.plantWater_BG;
+			animationList = Images.blackPlantWater;
+			
+		}
+		else {
+			this.image = Images.plantWater_WG;
+			animationList = Images.whitePlantWater;
+		}
+		this.heroAnimation = new HeroAnimation(animationList, this);
 	}
 
 	@Override
@@ -43,6 +52,9 @@ public class PlantWater extends PlantBase implements StraightMoveable {
 			return false;
 		}
 		if(hero instanceof FireBase) {
+			return false;
+		}
+		if(this.getFlag() != null && hero.getFlag() != null) {
 			return false;
 		}
 		return canKillSpread(x, y) || canKillStraight(x, y);

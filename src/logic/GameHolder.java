@@ -1,10 +1,14 @@
 package logic;
 
+import javafx.scene.Scene;
+
 public class GameHolder {
 	
 	GameMode gameMode;
 	GameTheme gameTheme;
 	GameField gameField;
+	public static boolean sound = true, music = true;
+	public static Scene latestScene;
 	
 	public GameHolder() {
 		this.gameMode = GameMode.SUMMONTHEGOD;
